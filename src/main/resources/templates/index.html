@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--  This file has been downloaded from bootdey.com @bootdey on twitter -->
+    <!--  All snippets are MIT license http://bootdey.com/license -->
+    <title>Social Media</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/index.css">
+
+    <style>
+        .image-container {
+            display: inline-block;
+            position: relative;
+        }
+
+        .image-container img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover; /* Ensures the image covers the area without distortion */
+        }
+
+        .image-container button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+    </style>
+
+</head>
+<body>
+<div id="loading-spinner" style="display: none;">
+    <img src="/images/Loading-Animation-Spin.gif" alt="Loading...">
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary my-0 sticky-top">
+    <!-- Container wrapper -->
+    <div class="container">
+        <a class="navbar-brand text justify-content-center align-content-center" onclick="getAllPost()">Minh .</a>
+
+        <!-- Toggle button -->
+        <button data-mdb-button-init class="navbar-toggler text-white" type="button" data-mdb-collapse-init
+                data-mdb-target="#navbarButtonsExample" aria-controls="navbarButtonsExample" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse" id="navbarButtonsExample">
+            <!-- Left links -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" onclick="getAllPost()">Home</a>
+                </li>
+            </ul>
+            <!-- Left links -->
+
+            <ul class="navbar-nav d-flex flex-row">
+                <!-- Icons -->
+                <li class="nav-item me-3 me-lg-0">
+                    <a class="nav-link" href="#">
+                        <i class="fab fa-facebook-f text-white"></i>
+                    </a>
+                </li>
+                <li class="nav-item me-3 me-lg-0">
+                    <a class="nav-link" href="#">
+                        <i class="fab fa-instagram text-white"></i>
+                    </a>
+                </li>
+                <li class="nav-item me-3 me-lg-0">
+                    <a class="nav-link" href="#">
+                        <i class="fab fa-linkedin text-white"></i>
+                    </a>
+                </li>
+                <li class="nav-item me-3 me-lg-0">
+                    <a class="nav-link" href="#">
+                        <i class="fab fa-github text-white"></i>
+                    </a>
+                </li>
+                <li class="nav-item me-3 me-lg-0">
+                    <a class="nav-link" href="#">
+                        <i class="fab fa-twitter text-white"></i>
+                    </a>
+                </li>
+                <!-- Icon dropdown -->
+                <li class="nav-item me-3 me-lg-0 dropdown">
+                    <a data-mdb-dropdown-init class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                       role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user text-white"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="#">Action</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Another action</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider"/>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- Collapsible wrapper -->
+    </div>
+    <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
+
+
+<div class="container profile">
+    <div class="row justify-content-center my-3">
+        <div class="col-md-6">
+            <div class="card gedf-card">
+                <div class="card-header">
+                    <h5 class="card-title">Create Post</h5>
+                </div>
+                <div class="card-body">
+                    <!--                    <form action="">-->
+
+                    <!--                        <div class="d-flex mb-3">-->
+                    <!--                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM1cDnT1Q5ZrkfLfxiSgFvC2ZsjpngynJGvg&s"-->
+                    <!--                                 class="rounded-circle me-2" width="30px" height="30px" alt="Profile Picture">-->
+                    <!--                            <textarea class="form-control" id="message" rows="3"-->
+                    <!--                                      placeholder="What's on your mind?"></textarea>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="d-flex justify-content-between">-->
+                    <!--                            <div class="btn-group">-->
+                    <!--                                <label class="btn btn-light">-->
+                    <!--                                    <i class="fa fa-image"></i> Photo/Video-->
+                    <!--                                    <input type="file" multiple style="display: none;">-->
+                    <!--                                </label>-->
+                    <!--                            </div>-->
+                    <!--                            <button type="submit" class="btn btn-primary">Post</button>-->
+                    <!--                        </div>-->
+                    <!--                    </form>-->
+
+                    <form action="">
+                        <div class="d-flex mb-3">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM1cDnT1Q5ZrkfLfxiSgFvC2ZsjpngynJGvg&s"
+                                 class="rounded-circle me-2" width="30px" height="30px" alt="Profile Picture">
+                            <textarea class="form-control" id="message" rows="3"
+                                      placeholder="What's on your mind?"></textarea>
+                        </div>
+                        <div id="image-preview" class="mb-3"></div>
+                        <div class="d-flex justify-content-between">
+                            <div class="btn-group">
+                                <label class="btn btn-light">
+                                    <i class="fa fa-image"></i> Photo
+                                    <input type="file" id="image-input" multiple style="display: none;">
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container profile" id="main-content">
+</div>
+
+
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+
+</script>
+<script src="/js/posts.js"></script>
+
+<script>
+    document.getElementById('image-input').addEventListener('change', function (event) {
+        const imagePreview = document.getElementById('image-preview');
+        imagePreview.innerHTML = ''; // Clear previous images
+        Array.from(event.target.files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const imgDiv = document.createElement('div');
+                imgDiv.classList.add('image-container');
+                imgDiv.innerHTML = `
+                    <img src="${e.target.result}" class="img-thumbnail me-2" width="100px" height="100px">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeImage(${index})">
+                        <i class="fa fa-times"></i>
+                    </button>
+                `;
+                imagePreview.appendChild(imgDiv);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    function removeImage(index) {
+        const imageInput = document.getElementById('image-input');
+        const dt = new DataTransfer();
+        const {files} = imageInput;
+        for (let i = 0; i < files.length; i++) {
+            if (i !== index) {
+                dt.items.add(files[i]);
+            }
+        }
+        imageInput.files = dt.files;
+        document.getElementById('image-preview').children[index].remove();
+    }
+</script>
+</body>
+</html>
