@@ -30,14 +30,13 @@ public class LikeService implements ILikeService {
 
         Like likeCreate = likeMapper.toEntity(likeModel);
 
-        LikeDTO likeDTO = likeMapper.toDto(likeCreate);
 
-        long employeeId = likeDTO.getEmployee_id();
-        long postId = likeDTO.getPost_id();
+        long employeeId = likeCreate.getEmployee_id();
+        long postId = likeCreate.getPost_id();
 
-        LikeDTO likeFind = getByEmployeeIdAndPostId(employeeId, postId);
+        long likeFindId = getByEmployeeIdAndPostId(employeeId, postId);
 
-        if (likeFind != null) {
+        if (likeFindId != 0) {
             return 0;
         }
 
@@ -63,22 +62,28 @@ public class LikeService implements ILikeService {
     }
 
     @Override
-    public LikeDTO getByEmployeeIdAndPostId(long employeeId, long postId) {
-        return likeMapper.toDto(iLikeRepository.getByEmployeeIdAndPostId(employeeId, postId));
+    public long getByEmployeeIdAndPostId(long employeeId, long postId) {
+
+        if (iLikeRepository.getByEmployeeIdAndPostId(employeeId, postId) == 0) {
+            return 0L;
+        }
+
+        return iLikeRepository.getByEmployeeIdAndPostId(employeeId, postId);
     }
 
     @Override
-    public long unLike(long employeeId, long postId) {
+    public long unLike(LikeModel likeModel) {
 
-        LikeDTO likeFind = getByEmployeeIdAndPostId(employeeId, postId);
+        long employeeId = likeModel.getEmployee_id();
+        long postId = likeModel.getPost_id();
 
-        if (likeFind == null) {
+        long likeFindId = getByEmployeeIdAndPostId(employeeId, postId);
+
+        if (likeFindId == 0) {
             return 0;
         }
 
-        long idLike = likeFind.getId();
-
-        iLikeRepository.delete(idLike);
+        iLikeRepository.delete(likeFindId);
 
         return 1;
     }

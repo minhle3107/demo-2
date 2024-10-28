@@ -53,10 +53,16 @@ public class LikeRepository implements ILikeRepository {
     }
 
     @Override
-    public Like getByEmployeeIdAndPostId(long employeeId, long postId) {
+    public long getByEmployeeIdAndPostId(long employeeId, long postId) {
 
         String sql = "SELECT * FROM likes l WHERE l.employee_id = ? AND l.post_id = ?";
 
-        return jdbcTemplate.queryForObject(sql, new LikeRowMapper(), employeeId, postId);
+        List<Like> likes = jdbcTemplate.query(sql, new LikeRowMapper(), employeeId, postId);
+
+        if (likes.isEmpty()) {
+            return 0;
+        } else {
+            return likes.get(0).getId();
+        }
     }
 }

@@ -86,9 +86,9 @@ const renderPosts = (posts) => {
                         <hr class="mb-1 opacity-1"/>
                         
                         <div class="row text-center fw-bold">
-                            <div class="col">
-                                <a href="#" class="text-body text-opacity-50 text-decoration-none d-block p-2"> <i class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes </a>
-                            </div>
+                        
+                            ${renderViewFeatLikeOrUnLike(false)}
+                        
                             <div class="col">
                                 <a href="${BASE_URL}/v1/posts/${post.id}" class="text-body text-opacity-50 text-decoration-none d-block p-2"> <i class="far fa-comment me-1 d-block d-sm-inline"></i> Comment </a>
                             </div>
@@ -142,6 +142,36 @@ const renderTotalLikeAndComment = (postId, totalLike, totalComment) => {
         <span>
             <a href="${BASE_URL}/v1/posts/${postId}" class="text-decoration-none text-secondary">${totalComment} comments</a>
         </span>
+    `
+
+}
+
+
+const renderViewFeatLikeOrUnLike = (status, postId) => {
+
+    if (status) {
+        return `
+  
+           <div class="col">
+           <form action="">
+           <input type="hidden" name="employee_id" value="1">
+                            <input type="hidden" name="post_id" value="${postId}">
+                <a href="#" class="text-body text-opacity-50 text-decoration-none d-block p-2"> <i class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes </a></form>
+           </div>
+  `
+    }
+
+    return `
+                            <div class="col">
+                                <form action="">
+                                <input type="hidden" name="employee_id" value="1">
+                            <input type="hidden" name="post_id" value="${postId}">
+                                    <a href="#" class="text-body text-opacity-50 text-decoration-none d-block p-2 text-primary"> 
+                                        <i class="far fa-thumbs-up me-1 d-block d-sm-inline text-primary"></i> 
+                                        <span class="text-primary">Like</span>
+                                    </a>
+                                </form>
+                            </div>
     `
 
 }
