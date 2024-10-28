@@ -72,11 +72,24 @@ public class PostRepository implements IPostRepository {
 
     @Override
     public PostClientDTO getByIdDetails(long id) {
+//        String query = "SELECT p.id, p.title, p.content, CONCAT(e.first_name, ' ', e.last_name) " +
+//                "AS author_name, p.created_at, e.avatar, p.author_id " +
+//                "FROM posts p " +
+//                "JOIN employees e ON e.id = p.author_id " +
+//                "WHERE p.id = ? AND p.deleted_at IS NULL";
+
         String query = "SELECT p.id, p.title, p.content, CONCAT(e.first_name, ' ', e.last_name) " +
-                "AS author_name, p.created_at, e.avatar, p.author_id " +
+                "AS author_name, p.created_at, e.avatar, p.author_id, " +
+                "COUNT(DISTINCT l.id) AS total_likes, " +
+                "COUNT(DISTINCT c.id) AS total_comments, " +
+                "COUNT(DISTINCT CASE WHEN l.employee_id = 1 THEN l.id END) AS liked_by_employee_1 " +
                 "FROM posts p " +
                 "JOIN employees e ON e.id = p.author_id " +
-                "WHERE p.id = ? AND p.deleted_at IS NULL";
+                "LEFT JOIN comments c ON c.post_id = p.id " +
+                "LEFT JOIN likes l ON l.post_id = p.id " +
+                "WHERE p.deleted_at IS NULL AND p.id = ? " +
+                "GROUP BY p.id, p.title, p.content, e.first_name, e.last_name, p.created_at, e.avatar " +
+                "order by p.created_at DESC";
 
         return jdbcTemplate.queryForObject(query, new PostClientRowMapper(), id);
     }
