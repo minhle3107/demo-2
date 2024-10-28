@@ -82,7 +82,7 @@ body {
 
 .post-footer {
     border-top: 1px solid #ddd;
-    padding: 15px;
+    padding: 15px 15px 0 15px;
 }
 
 .post-footer .input-group-addon a {
@@ -175,4 +175,19 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
+}
+
+.read-more-comment {
+    padding-left: 20px;
+    color: black;
+    font-size: 13px;
+
+}
+
+.read-more-comment:hover {
+    padding-left: 20px;
+    color: black;
+    font-size: 13px;
+    text-decoration: underline;
+    cursor: pointer;
 }

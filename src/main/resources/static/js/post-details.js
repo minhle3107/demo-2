@@ -151,6 +151,9 @@ const renderViewPostDetails = (post, comments) => {
                     </div>
 
                 </div>
+                <div class="d-flex justify-content-start mx-2">
+                    <span class="read-more-comment" onclick="loadMoreItems()" id="read-more-comment">Read More</span>
+                </div>
             </div>
 
         </div>
