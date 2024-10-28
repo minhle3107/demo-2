@@ -204,7 +204,7 @@ const renderViewFeatLikeOrUnLike = (countLike, postId) => {
                 <form onclick="createLike(event, ${postId})" id="form-like-${postId}">
                        <input type="hidden" name="post_id" value="${postId}">
                                         
-                       <a  class="text-body text-opacity-50 text-decoration-none d-block p-2"> <i class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes </a>
+                       <a  class="text-body text-opacity-50 text-decoration-none d-block p-2"> <i class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Like </a>
                 </form>
            </div>
   `
