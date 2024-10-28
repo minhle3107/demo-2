@@ -87,7 +87,8 @@ public class PostRepository implements IPostRepository {
         String query = "SELECT p.id, p.title, p.content, CONCAT(e.first_name, ' ', e.last_name) " +
                 "AS author_name, p.created_at, e.avatar, p.author_id, " +
                 "COUNT(DISTINCT l.id) AS total_likes, " +
-                "COUNT(DISTINCT c.id) AS total_comments " +
+                "COUNT(DISTINCT c.id) AS total_comments, " +
+                "COUNT(DISTINCT CASE WHEN l.employee_id = 1 THEN l.id END) AS liked_by_employee_1 " +
                 "FROM posts p " +
                 "JOIN employees e ON e.id = p.author_id " +
                 "LEFT JOIN comments c ON c.post_id = p.id " +

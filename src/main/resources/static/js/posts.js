@@ -87,7 +87,7 @@ const renderPosts = (posts) => {
                         
                         <div class="row text-center fw-bold">
                         
-                            ${renderViewFeatLikeOrUnLike(false)}
+                            ${renderViewFeatLikeOrUnLike(post.liked_by_employee_1, post.id)}
                         
                             <div class="col">
                                 <a href="${BASE_URL}/v1/posts/${post.id}" class="text-body text-opacity-50 text-decoration-none d-block p-2"> <i class="far fa-comment me-1 d-block d-sm-inline"></i> Comment </a>
@@ -147,26 +147,26 @@ const renderTotalLikeAndComment = (postId, totalLike, totalComment) => {
 }
 
 
-const renderViewFeatLikeOrUnLike = (status, postId) => {
+const renderViewFeatLikeOrUnLike = (countLike, postId) => {
 
-    if (status) {
+    if (countLike === 0) {
         return `
   
-           <div class="col">
-           <form action="">
-           <input type="hidden" name="employee_id" value="1">
-                            <input type="hidden" name="post_id" value="${postId}">
-                <a href="#" class="text-body text-opacity-50 text-decoration-none d-block p-2"> <i class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes </a></form>
+           <div class="col like-input">
+                <form onclick="createLike(event, ${postId})" id="form-like-${postId}">
+                       <input type="hidden" name="post_id" value="${postId}">
+                                        
+                       <a  class="text-body text-opacity-50 text-decoration-none d-block p-2"> <i class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes </a>
+                </form>
            </div>
   `
     }
 
     return `
-                            <div class="col">
-                                <form action="">
-                                <input type="hidden" name="employee_id" value="1">
+                            <div class="col like-input">
+                                <form  onclick="unLike(event, ${postId})" id="form-unlike-${postId}">
                             <input type="hidden" name="post_id" value="${postId}">
-                                    <a href="#" class="text-body text-opacity-50 text-decoration-none d-block p-2 text-primary"> 
+                                    <a  class="text-body text-opacity-50 text-decoration-none d-block p-2 text-primary"> 
                                         <i class="far fa-thumbs-up me-1 d-block d-sm-inline text-primary"></i> 
                                         <span class="text-primary">Like</span>
                                     </a>
@@ -194,7 +194,6 @@ const createPost = (event) => {
     $.ajax({
         url: `${BASE_URL}/api/v1/posts`,
         type: 'POST',
-
         contentType: 'application/json',
         data: JSON.stringify(postData),
         success: function (data) {
@@ -208,4 +207,74 @@ const createPost = (event) => {
     })
 
 
+}
+
+
+const createLike = (event, postId) => {
+    event.preventDefault()
+    console.log("Like")
+
+    const formLike = document.getElementById(`form-like-${postId}`)
+
+    const formData = new FormData(formLike)
+
+    const likeData = {
+        employee_id: 1,
+        post_id: formData.get("post_id")
+    }
+
+    LOADING_SPINNER.style.display = 'block';
+
+    $.ajax({
+        url: `${BASE_URL}/api/v1/likes`,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(likeData),
+        success: function (data) {
+            console.log("like success")
+            getAllPost()
+            LOADING_SPINNER.style.display = 'none';
+
+        },
+        error: function (error) {
+            console.log(error)
+            LOADING_SPINNER.style.display = 'none';
+
+        }
+    })
+
+}
+
+const unLike = (event, postId) => {
+    event.preventDefault()
+    console.log("Like")
+
+    const formLike = document.getElementById(`form-unlike-${postId}`)
+
+    const formData = new FormData(formLike)
+
+    const likeData = {
+        employee_id: 1,
+        post_id: formData.get("post_id")
+    }
+
+    LOADING_SPINNER.style.display = 'block';
+
+    $.ajax({
+        url: `${BASE_URL}/api/v1/unlikes`,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(likeData),
+        success: function (data) {
+            console.log("unlike success")
+            getAllPost()
+            LOADING_SPINNER.style.display = 'none';
+
+        },
+        error: function (error) {
+            console.log(error)
+            LOADING_SPINNER.style.display = 'none';
+
+        }
+    })
 }

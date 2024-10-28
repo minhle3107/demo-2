@@ -16,4 +16,5 @@ public class PostDetailsDTO extends PostDTO {
     private String formattedCreatedAt;
     private int total_likes;
     private int total_comments;
+    private int liked_by_employee_1;
 }

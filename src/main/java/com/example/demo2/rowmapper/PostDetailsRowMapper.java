@@ -21,6 +21,7 @@ public class PostDetailsRowMapper implements RowMapper<PostDetailsDTO> {
         postDetailsDTO.setCreated_at(rs.getTimestamp("created_at"));
         postDetailsDTO.setTotal_likes(rs.getInt("total_likes"));
         postDetailsDTO.setTotal_comments(rs.getInt("total_comments"));
+        postDetailsDTO.setLiked_by_employee_1(rs.getInt("liked_by_employee_1"));
 
         return postDetailsDTO;
     }
