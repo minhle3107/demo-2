@@ -90,3 +90,38 @@ const renderPosts = (posts) => {
         </div>
     `).join('')
 }
+
+
+const createPost = (event) => {
+    event.preventDefault();
+
+    const formCreatePost = document.getElementById("create-post");
+    let formData = new FormData(formCreatePost);
+
+    const postData = {
+        content: formData.get('content'),
+        author_id: 1
+    };
+
+    console.log(formData)
+
+    LOADING_SPINNER.style.display = 'block';
+
+    $.ajax({
+        url: `${BASE_URL}/api/v1/posts`,
+        type: 'POST',
+
+        contentType: 'application/json',
+        data: JSON.stringify(postData),
+        success: function (data) {
+            getAllPost();
+            LOADING_SPINNER.style.display = 'none';
+        },
+        error: function (error) {
+            console.error('Error:', error);
+            LOADING_SPINNER.style.display = 'none';
+        }
+    })
+
+
+}

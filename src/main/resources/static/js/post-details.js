@@ -95,7 +95,10 @@ const renderViewPostDetails = (post, comments) => {
                         <form id="create-cmt-root" method="post" onsubmit="submitCommentRootForm(event, ${post.id}, ${post.commentId})" enctype="multipart/form-data">
                             <div class="input-group d-flex justify-content-between">
                                 <input type="hidden" name="post_id" value="${post.id}">
-                                <input class="form-control" placeholder="Add a comment" type="text" name="content">
+                                <input class="form-control" placeholder="Add a comment" type="text" name="content" id="content-root">
+                                <button type="button" class="btn btn-secondary" onclick="toggleIconList()">
+                                    <i class="fas fa-smile"></i>
+                                </button>
                                 <label class="btn btn-primary">
                                     <i class="fas fa-upload"></i>
                                     <input type="file" id="comment-image" name="image" accept="image/*" style="display: none;" onchange="previewImage(event)">
@@ -107,6 +110,18 @@ const renderViewPostDetails = (post, comments) => {
                             </div>
                             <span class="text-danger" id="validate-content-root"></span>
                             <div id="image-preview" class="mt-2"></div>
+                            <div id="icon-list" class="d-none mt-2">
+                                <i class="fas fa-smile" onclick="insertIcon('😊')"></i>
+                                <i class="fas fa-heart" onclick="insertIcon('❤️')"></i>
+                                <i class="fas fa-thumbs-up" onclick="insertIcon('👍')"></i>
+                                <i class="fas fa-laugh" onclick="insertIcon('😂')"></i>
+                                <i class="fas fa-surprise" onclick="insertIcon('😮')"></i>
+                                <i class="fas fa-sad-tear" onclick="insertIcon('😢')"></i>
+                                <i class="fas fa-angry" onclick="insertIcon('😠')"></i>
+                                <i class="fas fa-kiss-wink-heart" onclick="insertIcon('😘')"></i>
+                                <i class="fas fa-grin-stars" onclick="insertIcon('🤩')"></i>
+                                <i class="fas fa-meh" onclick="insertIcon('😐')"></i>
+                            </div>
                         </form>
                         
                        
@@ -192,7 +207,10 @@ const showReplyForm = (postId, commentId) => {
         <div class="input-group d-flex justify-content-between">
             <input type="hidden" name="post_id" value="${postId}">
             <input type="hidden" name="parent_id" value="${commentId}">
-            <input class="form-control" placeholder="Add a comment" name="content" type="text" id="content-${postId}-${commentId}">
+            <input class="form-control" placeholder="Add a comment" name="content" type="text" id="content-${commentId}">
+            <button type="button" class="btn btn-secondary" onclick="toggleIconListReply(${commentId})">
+                                    <i class="fas fa-smile"></i>
+                                </button>
             <label class="btn btn-primary">
                                     <i class="fas fa-upload"></i>
                                     <input type="file" id="comment-image-${commentId}" name="image" accept="image/*" style="display: none;" onchange="previewImageChild(event, ${commentId})">
@@ -205,6 +223,21 @@ const showReplyForm = (postId, commentId) => {
                             <span class="text-danger" id="validate-content-${commentId}"></span>
                             
                             <div id="image-preview-${commentId}" class="mt-2"></div>
+                            <div id="icon-list-reply-${commentId}" class="d-none mt-2">
+                                <i class="fas fa-smile" onclick="insertIconReply('😊', ${commentId})"></i>
+                                <i class="fas fa-heart" onclick="insertIconReply('❤️', ${commentId})"></i>
+                                <i class="fas fa-thumbs-up" onclick="insertIconReply('👍', ${commentId})"></i>
+                                <i class="fas fa-smile" onclick="insertIconReply('😊', ${commentId})"></i>
+                                <i class="fas fa-heart" onclick="insertIconReply('❤️', ${commentId})"></i>
+                                <i class="fas fa-thumbs-up" onclick="insertIconReply('👍', ${commentId})"></i>
+                                <i class="fas fa-laugh" onclick="insertIconReply('😂', ${commentId})"></i>
+                                <i class="fas fa-surprise" onclick="insertIconReply('😮', ${commentId})"></i>
+                                <i class="fas fa-sad-tear" onclick="insertIconReply('😢', ${commentId})"></i>
+                                <i class="fas fa-angry" onclick="insertIconReply('😠', ${commentId})"></i>
+                                <i class="fas fa-kiss-wink-heart" onclick="insertIconReply('😘', ${commentId})"></i>
+                                <i class="fas fa-grin-stars" onclick="insertIconReply('🤩', ${commentId})"></i>
+                                <i class="fas fa-meh" onclick="insertIconReply('😐', ${commentId})"></i>
+                            </div>
         </div>
     </form>
     
@@ -343,5 +376,17 @@ function toggleIconList() {
 function insertIcon(icon) {
     const contentInput = document.getElementById('content-root');
     contentInput.value += icon;
-    document.getElementById('icon-list').classList.add('d-none');
+    document.getElementById('icon-list');
+}
+
+
+function toggleIconListReply(commentId) {
+    const iconList = document.getElementById(`icon-list-reply-${commentId}`);
+    iconList.classList.toggle('d-none');
+}
+
+function insertIconReply(icon, commentId) {
+    const contentInput = document.getElementById(`content-${commentId}`);
+    contentInput.value += icon;
+    document.getElementById(`icon-list-reply-${commentId}`);
 }

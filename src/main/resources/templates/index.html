@@ -146,15 +146,17 @@
                     <!--                        </div>-->
                     <!--                    </form>-->
 
-                    <form action="">
+                    <form onsubmit="createPost(event)" id="create-post">
+
                         <div class="d-flex mb-3">
                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM1cDnT1Q5ZrkfLfxiSgFvC2ZsjpngynJGvg&s"
                                  class="rounded-circle me-2" width="30px" height="30px" alt="Profile Picture">
                             <textarea class="form-control" id="message" rows="3"
-                                      placeholder="What's on your mind?"></textarea>
+                                      placeholder="What's on your mind?" name="content"></textarea>
                         </div>
                         <div id="image-preview" class="mb-3"></div>
                         <div class="d-flex justify-content-between">
+
                             <div class="btn-group">
                                 <label class="btn btn-light">
                                     <i class="fa fa-image"></i> Photo
@@ -162,6 +164,7 @@
                                 </label>
                             </div>
                             <button type="submit" class="btn btn-primary">Post</button>
+
                         </div>
                     </form>
 
