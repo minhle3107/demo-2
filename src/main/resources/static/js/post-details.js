@@ -33,7 +33,7 @@ getPostById(id);
 
 const renderViewPostDetails = (post, comments) => {
 
-    if (!post) return `<div></div>`;
+    if (!post) return '';
 
     return `
     <div class="row justify-content-center my-3">
@@ -396,7 +396,7 @@ const showReplyForm = (postId, commentId) => {
     </form>
     
     `;
-    document.getElementById(`content-${id}-${commentId}`).focus();
+    document.getElementById(`content-${commentId}`).focus();
 }
 
 const submitCommentRootForm = (event) => {
