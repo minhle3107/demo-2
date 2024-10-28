@@ -16,8 +16,11 @@ public class PostDetailsRowMapper implements RowMapper<PostDetailsDTO> {
         postDetailsDTO.setTitle(rs.getString("title"));
         postDetailsDTO.setContent(rs.getString("content"));
         postDetailsDTO.setAuthor_name(rs.getString("author_name"));
+        postDetailsDTO.setAuthor_id(rs.getLong("author_id"));
         postDetailsDTO.setAvatar(rs.getString("avatar"));
         postDetailsDTO.setCreated_at(rs.getTimestamp("created_at"));
+        postDetailsDTO.setTotal_likes(rs.getInt("total_likes"));
+        postDetailsDTO.setTotal_comments(rs.getInt("total_comments"));
 
         return postDetailsDTO;
     }

@@ -85,10 +85,16 @@ public class PostRepository implements IPostRepository {
     public List<PostDetailsDTO> getAllPostDetails() {
 
         String query = "SELECT p.id, p.title, p.content, CONCAT(e.first_name, ' ', e.last_name) " +
-                "AS author_name, p.created_at, e.avatar " +
+                "AS author_name, p.created_at, e.avatar, p.author_id, " +
+                "COUNT(DISTINCT l.id) AS total_likes, " +
+                "COUNT(DISTINCT c.id) AS total_comments " +
                 "FROM posts p " +
                 "JOIN employees e ON e.id = p.author_id " +
-                "WHERE p.deleted_at IS NULL order by p.created_at DESC";
+                "LEFT JOIN comments c ON c.post_id = p.id " +
+                "LEFT JOIN likes l ON l.post_id = p.id " +
+                "WHERE p.deleted_at IS NULL " +
+                "GROUP BY p.id, p.title, p.content, e.first_name, e.last_name, p.created_at, e.avatar " +
+                "order by p.created_at DESC";
 
         return jdbcTemplate.query(query, new PostDetailsRowMapper());
 

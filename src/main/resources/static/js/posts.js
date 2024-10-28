@@ -78,6 +78,25 @@ const renderPosts = (posts) => {
                                 </a>
                             </div>
                         </div>
+                        
+                        
+                        <div class="d-flex justify-content-between my-2 gap-3">
+                            ${renderTotalLikeAndComment(post.id, post.total_likes, post.total_comments)}
+                        </div>
+                        <hr class="mb-1 opacity-1"/>
+                        
+                        <div class="row text-center fw-bold">
+                            <div class="col">
+                                <a href="#" class="text-body text-opacity-50 text-decoration-none d-block p-2"> <i class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes </a>
+                            </div>
+                            <div class="col">
+                                <a href="${BASE_URL}/v1/posts/${post.id}" class="text-body text-opacity-50 text-decoration-none d-block p-2"> <i class="far fa-comment me-1 d-block d-sm-inline"></i> Comment </a>
+                            </div>
+                            <div class="col">
+                                <a href="#" class="text-body text-opacity-50 text-decoration-none d-block p-2"> <i class="fa fa-share me-1 d-block d-sm-inline"></i> Share </a>
+                            </div>
+                        </div>
+                        
                         <hr class="mb-1 opacity-1"/>
                         <div class="d-flex mt-2">
                             <div class="ms-auto">
@@ -91,6 +110,41 @@ const renderPosts = (posts) => {
     `).join('')
 }
 
+
+const renderTotalLikeAndComment = (postId, totalLike, totalComment) => {
+
+    if (!totalLike && !totalComment) {
+        return ''
+    }
+
+    if (!totalLike) {
+        return `
+        <span> </span>
+        <span>
+            <a href="${BASE_URL}/v1/posts/${postId}" class="text-decoration-none text-secondary">${totalComment} comments</a>
+        </span>
+        `
+    }
+
+    if (!totalComment) {
+        return `
+        <span>
+            <a href="${BASE_URL}/v1/posts/${postId}" class="text-decoration-none text-secondary">${totalLike} likes</a>
+        </span>
+        <span> </span>
+        `
+    }
+
+    return `
+        <span>
+            <a href="${BASE_URL}/v1/posts/${postId}" class="text-decoration-none text-secondary">${totalLike} likes</a>
+        </span>
+        <span>
+            <a href="${BASE_URL}/v1/posts/${postId}" class="text-decoration-none text-secondary">${totalComment} comments</a>
+        </span>
+    `
+
+}
 
 const createPost = (event) => {
     event.preventDefault();
