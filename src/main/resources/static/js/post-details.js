@@ -273,7 +273,7 @@ const createLike = (event, postId) => {
         data: JSON.stringify(likeData),
         success: function (data) {
             console.log("like success")
-            getPostById(id);
+            getPostById(postId, initialLoadCount)
             LOADING_SPINNER.style.display = 'none';
 
         },
@@ -308,7 +308,7 @@ const unLike = (event, postId) => {
         data: JSON.stringify(likeData),
         success: function (data) {
             console.log("unlike success")
-            getPostById(id);
+            getPostById(postId, initialLoadCount)
             LOADING_SPINNER.style.display = 'none';
 
         },
