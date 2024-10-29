@@ -2,15 +2,23 @@ const BASE_URL = `http://localhost:8188`
 const MAIN_CONTENT = document.getElementById('main-content')
 const LOADING_SPINNER = document.getElementById('loading-spinner')
 
+let comments = [];
+let currentIndex = 0;
+let initialLoadCount = 5;
+const loadMoreCount = 5;
+let commentSize = 0;
 
-const getPostById = (id) => {
+const getPostById = (id, initialLoadCount) => {
     LOADING_SPINNER.style.display = 'block';
     $.ajax({
         url: `${BASE_URL}/api/v1/posts/${id}`,
         type: 'GET',
         success: function (data) {
             console.log(data)
-            MAIN_CONTENT.innerHTML = renderViewPostDetails(data.post, data.comments)
+            comments = data.comments;
+            commentSize = comments.length;
+            MAIN_CONTENT.innerHTML = renderViewPostDetails(data.post, comments.slice(0, initialLoadCount));
+            currentIndex = initialLoadCount;
             LOADING_SPINNER.style.display = 'none';
         },
         error: function (error) {
@@ -18,6 +26,21 @@ const getPostById = (id) => {
             LOADING_SPINNER.style.display = 'none';
         }
     })
+}
+
+const loadMoreItems = () => {
+    const nextIndex = currentIndex + loadMoreCount;
+    const newComments = comments.slice(currentIndex, nextIndex);
+
+    // chèn HTML của các bình luận mới vào cuối danh sách bình luận hiện tại (.comments-list).
+    document.querySelector('.comments-list').insertAdjacentHTML('beforeend', renderViewCommentListRoot(newComments));
+    currentIndex = nextIndex;
+
+    initialLoadCount = nextIndex;
+
+    if (currentIndex >= comments.length) {
+        document.getElementById('read-more-comment').style.display = 'none';
+    }
 }
 
 
@@ -29,7 +52,7 @@ const id = url.pathname.split('/').pop();
 
 console.log(id);
 
-getPostById(id);
+getPostById(id, initialLoadCount);
 
 const renderViewPostDetails = (post, comments) => {
 
@@ -425,7 +448,8 @@ const submitCommentRootForm = (event) => {
         processData: false,
         contentType: false,
         success: function (data) {
-            getPostById(formData.get('post_id'));
+            getPostById(formData.get('post_id'), commentSize + 1);
+            document.getElementById('read-more-comment').style.display = 'none';
             LOADING_SPINNER.style.display = 'none';
         },
         error: function (error) {
@@ -462,7 +486,7 @@ const submitReplyForm = (event, postId, commentId) => {
         processData: false,
         contentType: false,
         success: function (data) {
-            getPostById(postId)
+            getPostById(postId, initialLoadCount)
             LOADING_SPINNER.style.display = 'none';
 
         },
@@ -547,3 +571,6 @@ function insertIconReply(icon, commentId) {
     contentInput.value += icon;
     document.getElementById(`icon-list-reply-${commentId}`);
 }
+
+
+document.getElementById('read-more-comment').addEventListener('click', loadMoreItems);
