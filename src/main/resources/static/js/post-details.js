@@ -62,7 +62,7 @@ const renderViewPostDetails = (post, comments) => {
     <div class="row justify-content-center my-3">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body custom-card-body">
                     <div class="d-flex align-items-center mb-3">
                         <a href="#"><img src="${post.authorInfo.avatar}" alt="" width="50"
                                          class="rounded-circle"/></a>
