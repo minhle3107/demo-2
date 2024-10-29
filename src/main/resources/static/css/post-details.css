@@ -196,3 +196,7 @@ body {
     text-decoration: underline;
     cursor: pointer;
 }
+
+.like-input {
+    cursor: pointer;
+}
