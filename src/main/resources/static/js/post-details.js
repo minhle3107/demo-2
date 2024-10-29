@@ -16,10 +16,17 @@ const getPostById = (id, initialLoadCount) => {
         success: function (data) {
             console.log(data)
             comments = data.comments;
-            commentSize = comments.length;
-            MAIN_CONTENT.innerHTML = renderViewPostDetails(data.post, comments.slice(0, initialLoadCount));
-            currentIndex = initialLoadCount;
-            LOADING_SPINNER.style.display = 'none';
+            if (comments !== null) {
+                commentSize = comments.length;
+                MAIN_CONTENT.innerHTML = renderViewPostDetails(data.post, comments.slice(0, initialLoadCount));
+                currentIndex = initialLoadCount;
+                LOADING_SPINNER.style.display = 'none';
+            } else {
+                commentSize = 0;
+                MAIN_CONTENT.innerHTML = renderViewPostDetails(data.post, comments);
+                currentIndex = initialLoadCount;
+                LOADING_SPINNER.style.display = 'none';
+            }
         },
         error: function (error) {
             console.log(error)

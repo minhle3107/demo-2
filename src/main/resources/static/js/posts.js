@@ -1,26 +1,82 @@
 const BASE_URL = `http://localhost:8188`
-const MAIN_CONTENT = document.getElementById('main-content')
+// const MAIN_CONTENT = document.getElementById('main-content')
 const LOADING_SPINNER = document.getElementById('loading-spinner')
 
-const getAllPost = () => {
+// const getAllPost = () => {
+//     LOADING_SPINNER.style.display = 'block';
+//     $.ajax({
+//         url: `${BASE_URL}/api/v1/posts`,
+//         type: 'GET',
+//         success: function (data) {
+//             // console.log(data);
+//             // console.log(renderPosts(data))
+//             MAIN_CONTENT.innerHTML = renderPosts(data);
+//             LOADING_SPINNER.style.display = 'none';
+//         },
+//         error: function (error) {
+//             console.log(error);
+//             LOADING_SPINNER.style.display = 'none';
+//         }
+//     });
+// }
+//
+// getAllPost();
+
+let currentPage = 1;
+const loadMoreCount = 2;
+let isLoading = false;
+
+const loadMoreItems = () => {
+    if (isLoading) return;
+    isLoading = true;
     LOADING_SPINNER.style.display = 'block';
+
+    console.log("currentPage ", currentPage)
+
     $.ajax({
-        url: `${BASE_URL}/api/v1/posts`,
+        url: `${BASE_URL}/api/v1/posts?pageNumber=${currentPage}&pageSize=${loadMoreCount}`,
         type: 'GET',
         success: function (data) {
-            // console.log(data);
-            // console.log(renderPosts(data))
-            MAIN_CONTENT.innerHTML = renderPosts(data);
-            LOADING_SPINNER.style.display = 'none';
+            if (data.posts.length > 0) {
+                const newPosts = renderPosts(data.posts);
+                document.getElementById('main-content').insertAdjacentHTML('beforeend', newPosts);
+                currentPage++;
+                isLoading = false;
+                LOADING_SPINNER.style.display = 'none';
+            } else {
+                window.removeEventListener('scroll', handleScroll);
+                LOADING_SPINNER.style.display = 'none';
+            }
+
+
         },
         error: function (error) {
-            console.log(error);
+            console.error('Error:', error);
+            isLoading = false;
             LOADING_SPINNER.style.display = 'none';
         }
     });
-}
+};
 
-getAllPost();
+const handleScroll = () => {
+
+    /*
+    window.innerHeight: Chiều cao của cửa sổ trình duyệt.
+    window.scrollY: Khoảng cách mà người dùng đã cuộn từ đầu trang xuống.
+    document.body.offsetHeight: Chiều cao tổng thể của nội dung trang.
+    window.innerHeight + window.scrollY >= document.body.offsetHeight - 500:
+    Nếu chiều cao của cửa sổ cộng với khoảng cách đã cuộn lớn hơn hoặc bằng chiều cao của nội dung trang trừ đi 500 pixel,
+    điều này có nghĩa là người dùng đã cuộn gần đến cuối trang.
+
+     */
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+        loadMoreItems();
+    }
+};
+
+window.addEventListener('scroll', handleScroll);
+
+loadMoreItems();
 
 
 const renderPosts = (posts) => {
@@ -187,7 +243,7 @@ const createPost = (event) => {
         author_id: 1
     };
 
-    console.log(formData)
+    console.log(formData);
 
     LOADING_SPINNER.style.display = 'block';
 
@@ -197,16 +253,15 @@ const createPost = (event) => {
         contentType: 'application/json',
         data: JSON.stringify(postData),
         success: function (data) {
-            getAllPost();
+            isLoading = false;
+            loadMoreItems();
             LOADING_SPINNER.style.display = 'none';
         },
         error: function (error) {
             console.error('Error:', error);
             LOADING_SPINNER.style.display = 'none';
         }
-    })
-
-
+    });
 }
 
 
@@ -232,7 +287,10 @@ const createLike = (event, postId) => {
         data: JSON.stringify(likeData),
         success: function (data) {
             console.log("like success")
-            getAllPost()
+            // getAllPost()
+            isLoading = false;
+            loadMoreItems();
+
             LOADING_SPINNER.style.display = 'none';
 
         },
@@ -267,7 +325,9 @@ const unLike = (event, postId) => {
         data: JSON.stringify(likeData),
         success: function (data) {
             console.log("unlike success")
-            getAllPost()
+            // getAllPost()
+            isLoading = false;
+            loadMoreItems();
             LOADING_SPINNER.style.display = 'none';
 
         },
