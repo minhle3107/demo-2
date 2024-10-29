@@ -2,25 +2,6 @@ const BASE_URL = `http://localhost:8188`
 // const MAIN_CONTENT = document.getElementById('main-content')
 const LOADING_SPINNER = document.getElementById('loading-spinner')
 
-// const getAllPost = () => {
-//     LOADING_SPINNER.style.display = 'block';
-//     $.ajax({
-//         url: `${BASE_URL}/api/v1/posts`,
-//         type: 'GET',
-//         success: function (data) {
-//             // console.log(data);
-//             // console.log(renderPosts(data))
-//             MAIN_CONTENT.innerHTML = renderPosts(data);
-//             LOADING_SPINNER.style.display = 'none';
-//         },
-//         error: function (error) {
-//             console.log(error);
-//             LOADING_SPINNER.style.display = 'none';
-//         }
-//     });
-// }
-//
-// getAllPost();
 
 let currentPage = 1;
 const loadMoreCount = 2;
@@ -136,14 +117,14 @@ const renderPosts = (posts) => {
                         </div>
                         
                         
-                        <div class="d-flex justify-content-between my-2 gap-3">
+                        <div class="d-flex justify-content-between my-2 gap-3" id="total-like-and-comment-${post.id}">
                             ${renderTotalLikeAndComment(post.id, post.total_likes, post.total_comments)}
                         </div>
                         <hr class="mb-1 opacity-1"/>
                         
                         <div class="row text-center fw-bold">
                         
-                            ${renderViewFeatLikeOrUnLike(post.liked_by_employee_1, post.id)}
+                            ${renderViewFeatLikeOrUnLike(post.liked_by_employee_1, post.id, post.total_likes, post.total_comments)}
                         
                             <div class="col">
                                 <a href="${BASE_URL}/v1/posts/${post.id}" class="text-body text-opacity-50 text-decoration-none d-block p-2"> <i class="far fa-comment me-1 d-block d-sm-inline"></i> Comment </a>
@@ -175,7 +156,7 @@ const renderTotalLikeAndComment = (postId, totalLike, totalComment) => {
 
     if (!totalLike) {
         return `
-        <span> </span>
+        <span id="total-likes-${postId}"> </span>
         <span>
             <a href="${BASE_URL}/v1/posts/${postId}" class="text-decoration-none text-secondary">${totalComment} comments</a>
         </span>
@@ -184,7 +165,7 @@ const renderTotalLikeAndComment = (postId, totalLike, totalComment) => {
 
     if (!totalComment) {
         return `
-        <span>
+        <span id="total-likes-${postId}">
             <a href="${BASE_URL}/v1/posts/${postId}" class="text-decoration-none text-secondary">${totalLike} likes</a>
         </span>
         <span> </span>
@@ -192,7 +173,7 @@ const renderTotalLikeAndComment = (postId, totalLike, totalComment) => {
     }
 
     return `
-        <span>
+        <span id="total-likes-${postId}">
             <a href="${BASE_URL}/v1/posts/${postId}" class="text-decoration-none text-secondary">${totalLike} likes</a>
         </span>
         <span>
@@ -203,13 +184,13 @@ const renderTotalLikeAndComment = (postId, totalLike, totalComment) => {
 }
 
 
-const renderViewFeatLikeOrUnLike = (countLike, postId) => {
+const renderViewFeatLikeOrUnLike = (countLike, postId, totalLikes, totalComments) => {
 
     if (countLike === 0) {
         return `
   
            <div class="col like-input">
-                <form onclick="createLike(event, ${postId})" id="form-like-${postId}">
+                <form onclick="createLike(event, ${postId}, ${totalLikes}, ${totalComments})" id="form-like-${postId}">
                        <input type="hidden" name="post_id" value="${postId}">
                                         
                        <a  class="text-body text-opacity-50 text-decoration-none d-block p-2"> <i class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Like </a>
@@ -220,7 +201,7 @@ const renderViewFeatLikeOrUnLike = (countLike, postId) => {
 
     return `
                             <div class="col like-input">
-                                <form  onclick="unLike(event, ${postId})" id="form-unlike-${postId}">
+                                <form  onclick="unLike(event, ${postId}, ${totalLikes}, ${totalComments})" id="form-unlike-${postId}">
                             <input type="hidden" name="post_id" value="${postId}">
                                     <a  class="text-body text-opacity-50 text-decoration-none d-block p-2 text-primary"> 
                                         <i class="far fa-thumbs-up me-1 d-block d-sm-inline text-primary"></i> 
@@ -239,8 +220,7 @@ const createPost = (event) => {
     let formData = new FormData(formCreatePost);
 
     const postData = {
-        content: formData.get('content'),
-        author_id: 1
+        content: formData.get('content'), author_id: 1
     };
 
     console.log(formData);
@@ -254,8 +234,12 @@ const createPost = (event) => {
         data: JSON.stringify(postData),
         success: function (data) {
             isLoading = false;
+            currentPage = 1;
+            document.getElementById('main-content').innerHTML = '';
             loadMoreItems();
             LOADING_SPINNER.style.display = 'none';
+
+            document.getElementById('status-content').value = '';
         },
         error: function (error) {
             console.error('Error:', error);
@@ -264,19 +248,16 @@ const createPost = (event) => {
     });
 }
 
+const createLike = (event, postId, totalLikes, totalComments) => {
+    event.preventDefault();
+    // console.log("Like");
 
-const createLike = (event, postId) => {
-    event.preventDefault()
-    console.log("Like")
-
-    const formLike = document.getElementById(`form-like-${postId}`)
-
-    const formData = new FormData(formLike)
+    const formLike = document.getElementById(`form-like-${postId}`);
+    const formData = new FormData(formLike);
 
     const likeData = {
-        employee_id: 1,
-        post_id: formData.get("post_id")
-    }
+        employee_id: 1, post_id: formData.get("post_id")
+    };
 
     LOADING_SPINNER.style.display = 'block';
 
@@ -286,35 +267,49 @@ const createLike = (event, postId) => {
         contentType: 'application/json',
         data: JSON.stringify(likeData),
         success: function (data) {
-            console.log("like success")
-            // getAllPost()
+            console.log("like success");
             isLoading = false;
-            loadMoreItems();
+
+            const likeContainer = document.querySelector(`#form-like-${postId}`).parentElement;
+
+            let totalLikesNew;
+
+            if (totalLikes === 0) {
+                totalLikesNew = Number(totalLikes) + 1;
+            } else {
+                totalLikesNew = Number(totalLikes)
+            }
+
+            likeContainer.innerHTML = renderViewFeatLikeOrUnLike(1, postId, totalLikes, totalComments);
+
+            const totalLikeAndComment = document.getElementById(`total-like-and-comment-${postId}`);
+
+
+            console.log("totalLikesNew", totalLikesNew)
+
+
+            totalLikeAndComment.innerHTML = renderTotalLikeAndComment(postId, totalLikesNew, totalComments)
+
 
             LOADING_SPINNER.style.display = 'none';
-
         },
         error: function (error) {
-            console.log(error)
+            console.log(error);
             LOADING_SPINNER.style.display = 'none';
-
         }
-    })
+    });
+};
 
-}
+const unLike = (event, postId, totalLikes, totalComments) => {
+    event.preventDefault();
+    // console.log("Unlike");
 
-const unLike = (event, postId) => {
-    event.preventDefault()
-    console.log("Like")
-
-    const formLike = document.getElementById(`form-unlike-${postId}`)
-
-    const formData = new FormData(formLike)
+    const formLike = document.getElementById(`form-unlike-${postId}`);
+    const formData = new FormData(formLike);
 
     const likeData = {
-        employee_id: 1,
-        post_id: formData.get("post_id")
-    }
+        employee_id: 1, post_id: formData.get("post_id")
+    };
 
     LOADING_SPINNER.style.display = 'block';
 
@@ -324,17 +319,32 @@ const unLike = (event, postId) => {
         contentType: 'application/json',
         data: JSON.stringify(likeData),
         success: function (data) {
-            console.log("unlike success")
-            // getAllPost()
+            console.log("unlike success");
             isLoading = false;
-            loadMoreItems();
-            LOADING_SPINNER.style.display = 'none';
 
+            const likeContainer = document.querySelector(`#form-unlike-${postId}`).parentElement;
+
+            let totalLikesNew;
+            if (totalLikes === 0) {
+                totalLikesNew = Number(totalLikes)
+            } else {
+                totalLikesNew = Number(totalLikes) - 1
+            }
+
+            likeContainer.innerHTML = renderViewFeatLikeOrUnLike(0, postId, totalLikes, totalComments);
+
+            const totalLikeAndComment = document.getElementById(`total-like-and-comment-${postId}`);
+
+
+            console.log("totalLikesNew", totalLikesNew)
+
+            totalLikeAndComment.innerHTML = renderTotalLikeAndComment(postId, totalLikesNew, totalComments)
+
+            LOADING_SPINNER.style.display = 'none';
         },
         error: function (error) {
-            console.log(error)
+            console.log(error);
             LOADING_SPINNER.style.display = 'none';
-
         }
-    })
-}
+    });
+};

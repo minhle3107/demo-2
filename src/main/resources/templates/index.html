@@ -43,7 +43,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary my-0 sticky-top">
     <!-- Container wrapper -->
     <div class="container">
-        <a class="navbar-brand text justify-content-center align-content-center" onclick="getAllPost()">Minh .</a>
+        <a class="navbar-brand text justify-content-center align-content-center" onclick="loadMoreItems()">Minh .</a>
 
         <!-- Toggle button -->
         <button data-mdb-button-init class="navbar-toggler text-white" type="button" data-mdb-collapse-init
@@ -57,7 +57,7 @@
             <!-- Left links -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" onclick="getAllPost()">Home</a>
+                    <a class="nav-link" onclick="loadMoreItems()">Home</a>
                 </li>
             </ul>
             <!-- Left links -->
@@ -151,7 +151,7 @@
                         <div class="d-flex mb-3">
                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM1cDnT1Q5ZrkfLfxiSgFvC2ZsjpngynJGvg&s"
                                  class="rounded-circle me-2" width="30px" height="30px" alt="Profile Picture">
-                            <textarea class="form-control" id="message" rows="3"
+                            <textarea class="form-control" id="status-content" rows="3"
                                       placeholder="What's on your mind?" name="content"></textarea>
                         </div>
                         <div id="image-preview" class="mb-3"></div>
