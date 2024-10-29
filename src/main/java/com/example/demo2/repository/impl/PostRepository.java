@@ -2,6 +2,7 @@ package com.example.demo2.repository.impl;
 
 import com.example.demo2.dto.PostClientDTO;
 import com.example.demo2.dto.PostDetailsDTO;
+import com.example.demo2.dto.SearchPostDTO;
 import com.example.demo2.entity.Post;
 import com.example.demo2.repository.IPostRepository;
 import com.example.demo2.rowmapper.PostClientRowMapper;
@@ -95,7 +96,12 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
-    public List<PostDetailsDTO> getAllPostDetails() {
+    public List<PostDetailsDTO> getAllPostDetails(SearchPostDTO searchPostDTO) {
+
+        int pageSize = searchPostDTO.getPageSize();
+        int pageNumber = searchPostDTO.getPageNumber();
+
+        int offsetPost = (pageNumber - 1) * pageSize;
 
         String query = "SELECT p.id, p.title, p.content, CONCAT(e.first_name, ' ', e.last_name) " +
                 "AS author_name, p.created_at, e.avatar, p.author_id, " +
@@ -108,9 +114,15 @@ public class PostRepository implements IPostRepository {
                 "LEFT JOIN likes l ON l.post_id = p.id " +
                 "WHERE p.deleted_at IS NULL " +
                 "GROUP BY p.id, p.title, p.content, e.first_name, e.last_name, p.created_at, e.avatar " +
-                "order by p.created_at DESC";
+                "order by p.created_at DESC LIMIT ? OFFSET ?";
 
-        return jdbcTemplate.query(query, new PostDetailsRowMapper());
+        return jdbcTemplate.query(query, new PostDetailsRowMapper(), pageSize, offsetPost);
 
+    }
+
+    @Override
+    public int totalPostByEmployeeId() {
+        String sql = "SELECT COUNT(*) AS total_post FROM posts";
+        return jdbcTemplate.queryForObject(sql, Integer.class);
     }
 }

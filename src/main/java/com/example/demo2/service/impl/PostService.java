@@ -94,8 +94,28 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public List<PostDetailsDTO> getAllPostDetails() {
-        List<PostDetailsDTO> postDetailsDTOList = iPostRepository.getAllPostDetails();
+    public PaginationPostDetailsDTO getAllPostDetails(SearchPostDTO searchPostDTO) {
+
+        int pageSize = searchPostDTO.getPageSize();
+        int pageNumber = searchPostDTO.getPageNumber();
+
+        List<PostDetailsDTO> postDetailsDTOList = iPostRepository.getAllPostDetails(searchPostDTO);
+
+        int totalPost = iPostRepository.totalPostByEmployeeId();
+
+        // Số item trong trang hiệnt tại
+        int totalItems = postDetailsDTOList.size();
+
+        int totalPage = (int) Math.ceil((double) totalPost / pageSize);
+
+        MetadataPostDTO metadataPostDTO = new MetadataPostDTO();
+
+        metadataPostDTO.setTotalItems(totalPost);
+        metadataPostDTO.setTotalPages(totalPage);
+        metadataPostDTO.setPageSize(pageSize);
+        metadataPostDTO.setCurrentPage(pageNumber);
+        metadataPostDTO.setElementsInTheCurrentPage(totalItems);
+
 
         for (PostDetailsDTO post : postDetailsDTOList) {
             LocalDateTime dateTime = TimestampConverter.convertToDateTime(post.getCreated_at());
@@ -103,6 +123,11 @@ public class PostService implements IPostService {
             post.setFormattedCreatedAt(formattedDateTime);
         }
 
-        return postDetailsDTOList;
+        PaginationPostDetailsDTO paginationPostDetailsDTO = new PaginationPostDetailsDTO();
+
+        paginationPostDetailsDTO.setPosts(postDetailsDTOList);
+        paginationPostDetailsDTO.setMetadata(metadataPostDTO);
+
+        return paginationPostDetailsDTO;
     }
 }
