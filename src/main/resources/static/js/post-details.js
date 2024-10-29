@@ -338,7 +338,7 @@ const renderViewCommentListRoot = (commentList) => {
                 <p class="mb-1">${comment.commentDetails.content}</p>
                 ${comment.commentDetails.imageUrl ? `<img src="${comment.commentDetails.imageUrl}" class="img-fluid rounded my-2" alt="thumbnail">` : ''}
                 <div class="d-flex gap-2">
-                    <span class="text-primary reply" role="button" onclick="showReplyForm(${comment.commentDetails.postId}, ${comment.commentDetails.id})">Reply</span>
+                    <span class="text-black reply" role="button" onclick="showReplyForm(${comment.commentDetails.postId}, ${comment.commentDetails.id})">Reply</span>
                 </div>
                 ${renderViewCommentChild(comment.commentDetails.childComments, comment.commentDetails.postId)}
                 <div id="reply-root-${comment.commentDetails.id}" class="mt-2"></div>
@@ -370,7 +370,7 @@ const renderViewCommentChild = (commentsChild, postId) => {
                 <p class="mb-1">${comment.commentDetails.content}</p>
                 ${comment.commentDetails.imageUrl ? `<img src="${comment.commentDetails.imageUrl}" class="img-fluid rounded my-2" alt="thumbnail">` : ''}
                 <div class="d-flex gap-2">
-                    <span class="text-primary reply" role="button" onclick="showReplyForm(${comment.commentDetails.postId}, ${comment.commentDetails.parentId})">Reply</span>
+                    <span class="text-black reply" role="button" onclick="showReplyForm(${comment.commentDetails.postId}, ${comment.commentDetails.parentId})">Reply</span>
                 </div>
                 ${renderViewCommentChild(comment.commentDetails.childComments, comment.commentDetails.postId)}
             </div>
