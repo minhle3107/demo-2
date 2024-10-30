@@ -17,6 +17,7 @@ const getPostById = (id, initialLoadCount) => {
             console.log(data)
             comments = data.comments;
             if (comments !== null) {
+                document.getElementById('read-more-comment').style.display = 'none';
                 commentSize = comments.length;
                 MAIN_CONTENT.innerHTML = renderViewPostDetails(data.post, comments.slice(0, initialLoadCount));
                 currentIndex = initialLoadCount;
@@ -182,7 +183,7 @@ const renderViewPostDetails = (post, comments) => {
 
                 </div>
                 <div class="d-flex justify-content-start mx-2">
-                    <span class="read-more-comment" onclick="loadMoreItems()" id="read-more-comment">Read More</span>
+                    <span class="read-more-comment" onclick="loadMoreItems()" id="read-more-comment" style="display: block">Read More</span>
                 </div>
             </div>
 
